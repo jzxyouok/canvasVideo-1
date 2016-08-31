@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<button onclick="a.video1Elem.play();">Click to Play</button>
 <div id="video1" class="videoStyle">
 </div>
 <div id="video2" class="videoStyle">
@@ -33,7 +34,7 @@
     a.ctx1 = document.querySelector("#video1>canvas").getContext('2d');
     a.ctx2 = document.querySelector("#video2>canvas").getContext('2d');
 
-    a.video1Elem.play();
+    //a.video1Elem.play();
     //a.video2Elem.play();
     //document.querySelector('audio').play();
     //createjs.Ticker.addEventListener("tick", onFrame);
