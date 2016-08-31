@@ -14,7 +14,7 @@
     top:  0px;
     width: 640px;
     height: 360px;
-    border: dotted black 1px;
+    /*border: dotted black 1px;*/
 }
 
 .slider{
@@ -36,11 +36,11 @@
 
 .videoStyle>video{
     position: relative;
-    display: none;
+    /*display: none;*/
 }
 
 #js-logger {
-    top: 400px;
+    top: 820px;
     left: 50px;
     position: absolute;
     font-size: 40px;
