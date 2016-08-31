@@ -40,8 +40,8 @@
 }
 
 #js-logger {
-    top: 800px;
+    top: 400px;
     left: 50px;
     position: absolute;
-    font-size: 50px;
+    font-size: 40px;
 }
