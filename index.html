@@ -27,6 +27,23 @@
         elem: document.getElementById('slider'),
     });
 
+    a.video1Elem = insertVideo(document.querySelector('#video1'), 'video2.mp4', true);
+    a.video2Elem = insertVideo(document.querySelector('#video2'), 'video3.mp4', false);
+
+    a.ctx1 = document.querySelector("#video1>canvas").getContext('2d');
+    a.ctx2 = document.querySelector("#video2>canvas").getContext('2d');
+
+    a.video1Elem.play();
+    //a.video2Elem.play();
+    a.video1Elem.ontimeupdate = function() {
+        console.log('timeUpdate');
+        document.querySelector('#js-logger').innerHTML = ', vid1 time:' + a.video1Elem.currentTime  + ', <br/> vid2 time: ' + a.video2Elem.currentTime + ',<br/> snd time: ';
+
+        a.video2Elem.currentTime = parseFloat(a.video1Elem.currentTime.toFixed(2));
+
+        a.ctx1.drawImage(a.video1Elem, 0, 0, 360, 180);
+        a.ctx2.drawImage(a.video2Elem, 0, 0, 360, 180);
+    };
     setSizetoElem(document.querySelector('#video1'), parseInt(sliderElem.querySelector('.thumb').style.left));
 
     sliderElem.addEventListener('slide', function(event) {
@@ -76,27 +93,6 @@
         var canvasElem = elem.querySelector('canvas');
         canvasElem.style.left = -posX + 'px'; //videoElem.style.left =
     }
-
-    //a.video1Elem =  document.querySelector('#video1>video');
-    //a.video2Elem =  document.querySelector('#video2>video');
-
-    a.ctx1 = document.querySelector("#video1>canvas").getContext('2d');
-    a.ctx2 = document.querySelector("#video2>canvas").getContext('2d');
-
-    a.video1Elem = insertVideo(document.querySelector('#video1'), 'video2.mp4', true);
-    a.video2Elem = insertVideo(document.querySelector('#video2'), 'video3.mp4', false);
-
-    a.video1Elem.play();
-    //a.video2Elem.play();
-    a.video1Elem.ontimeupdate = function() {
-        console.log('timeUpdate');
-        document.querySelector('#js-logger').innerHTML = ', vid1 time:' + a.video1Elem.currentTime  + ', <br/> vid2 time: ' + a.video2Elem.currentTime + ',<br/> snd time: ';
-
-        a.video2Elem.currentTime = parseFloat(a.video1Elem.currentTime.toFixed(2));
-
-        a.ctx1.drawImage(a.video1Elem, 0, 0, 360, 180);
-        a.ctx2.drawImage(a.video2Elem, 0, 0, 360, 180);
-    };
 
     setTimeout(function () {
         console.log('start play audio: ' + a.video1Elem.currentTime);
