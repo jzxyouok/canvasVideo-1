@@ -1,0 +1,47 @@
+.videoStyle  {
+    overflow: hidden;
+    position: absolute;
+    left: 50px;
+    top:  50px;
+    width: 640px;
+    height: 740px;
+}
+
+.canvasStyle{
+    overflow: hidden;
+    position: absolute;
+    left: 0px;
+    top:  0px;
+    width: 640px;
+    height: 360px;
+    border: dotted black 1px;
+}
+
+.slider{
+    left: 50px;
+    top: 50px;
+    width: 640px;
+    height: 360px;
+    position: absolute;
+    overflow: hidden;
+    z-index: 102;
+}
+
+#video1 {
+    z-index: 101;
+}
+#video2 {
+    z-index: 100;
+}
+
+.videoStyle>video{
+    position: relative;
+    display: none;
+}
+
+#js-logger {
+    top: 800px;
+    left: 50px;
+    position: absolute;
+    font-size: 50px;
+}

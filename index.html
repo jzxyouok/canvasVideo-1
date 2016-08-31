@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="slider.js" ></script>
+    <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+</head>
+
+<body>
+<audio src="./src/video2.mp3"></audio>
+
+<div id="video1" class="videoStyle">
+    <!-- <video src="./src/video2.mp4" muted></video> -->
+    <canvas class="canvasStyle"></canvas>
+</div>
+<div id="video2" class="videoStyle">
+    <!--  <video src="./src/video3.mp4" muted></video> -->
+    <canvas class="canvasStyle"></canvas>
+</div>
+<div id="slider" class='slider' style="">
+    <div class="thumb" style="left: 180px; top: 0px; width: 12px; height: 360px; position: relative; overflow: hidden; z-index: 102;">
+        <div style="left: 4px; top: 0px; width: 4px; height: 360px; position: relative; overflow: hidden; z-index: 102; background-color: red;"></div>
+    </div>
+</div>
+
+<div id="js-logger"></div>
+<script>
+    var a = {};
+    var sliderElem = document.getElementById('slider');
+    var slider = new Slider({
+        elem: document.getElementById('slider'),
+    });
+
+    setSizetoElem(document.querySelector('#video1'), parseInt(sliderElem.querySelector('.thumb').style.left));
+
+    sliderElem.addEventListener('slide', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setSizetoElem(document.querySelector('#video1'), event.detail);
+    });
+
+    function insertVideo(destElem, videoSrc, isAudio) {
+        var videoElem = document.createElement( 'video' );
+        var canvasElem = document.createElement( 'canvas' );
+
+        videoElem.width  = canvasElem.width  = parseInt(destElem.style.width);
+        videoElem.height = canvasElem.height = parseInt(destElem.style.height);
+        videoElem.style.position = canvasElem.style.position = 'relative';
+
+        canvasElem.classList.add('js-canvas');
+
+        videoElem.setAttribute('src', /*appsnack.appsnackAdunitObj.config.media.dir +*/'./src/'+ videoSrc);
+        videoElem.currentTime = 0.1;
+
+        destElem.appendChild(canvasElem);
+
+        //initMedia(videoElem);
+
+        if(isAudio) {
+            var audioElem = document.createElement( 'audio' );
+            audioElem.setAttribute('src', /*appsnack.appsnackAdunitObj.config.media.dir + */ './src/'+ videoSrc.split('.')[0] + '.mp3');
+            destElem.appendChild(audioElem);
+            //initMedia(audioElem);
+        }
+
+        return videoElem;
+    }
+
+    function setSizetoElem(elem, posX) {
+        var sliderElem = document.getElementById('slider');
+        var sliderStyle = getComputedStyle(sliderElem);
+
+        var startDivPosX = parseInt(sliderStyle.left) + posX + 4;
+        var rightBorder =  parseInt(sliderStyle.left) +   parseInt(sliderStyle.width);
+
+        elem.style.left = startDivPosX + 'px';
+        elem.style.width = rightBorder - startDivPosX + 'px';
+
+        //var videoElem = elem.querySelector('video');
+        var canvasElem = elem.querySelector('canvas');
+        canvasElem.style.left = -posX + 'px'; //videoElem.style.left =
+    }
+
+    //a.video1Elem =  document.querySelector('#video1>video');
+    //a.video2Elem =  document.querySelector('#video2>video');
+
+    a.ctx1 = document.querySelector("#video1>canvas").getContext('2d');
+    a.ctx2 = document.querySelector("#video2>canvas").getContext('2d');
+
+    a.video1Elem = insertVideo(document.querySelector('#video1'), 'video2.mp4', true);
+    a.video2Elem = insertVideo(document.querySelector('#video2'), 'video3.mp4', false);
+
+    a.video1Elem.play();
+    //a.video2Elem.play();
+    a.video1Elem.ontimeupdate = function() {
+        console.log('timeUpdate');
+        document.querySelector('#js-logger').innerHTML = ', vid1 time:' + a.video1Elem.currentTime  + ', <br/> vid2 time: ' + a.video2Elem.currentTime + ',<br/> snd time: ';
+
+        a.video2Elem.currentTime = parseFloat(a.video1Elem.currentTime.toFixed(2));
+
+        a.ctx1.drawImage(a.video1Elem, 0, 0, 360, 180);
+        a.ctx2.drawImage(a.video2Elem, 0, 0, 360, 180);
+    };
+
+    setTimeout(function () {
+        console.log('start play audio: ' + a.video1Elem.currentTime);
+        //a.video1Elem.pause();
+        //a.video2Elem.pause();
+        //document.querySelector('audio').play();
+
+        //createjs .Ticker.addEventListener("tick", onFrame);
+    }, 1000);
+
+    //document.querySelector('audio').play();
+
+
+    function onFrame(){
+        //if(a.tickCount < 3) {
+        //    a.tickCount++;
+        //    return;
+        //}
+        var audio = document.querySelector('audio');
+
+        //console.log('tick: '); // + a.tickCount);
+        a.video2Elem.currentTime = a.video1Elem.currentTime = parseFloat(audio.currentTime.toFixed(2));
+
+        document.querySelector('#js-logger').innerHTML = 'audio: '+ audio.currentTime.toFixed(2) + ', <br/> vid1 time:' + a.video1Elem.currentTime  + ', <br/> vid2 time: ' + a.video2Elem.currentTime + ',<br/> snd time: ' + audio.currentTime;
+
+        a.ctx1.drawImage(a.video1Elem, 0, 0, 360, 180);
+        a.ctx2.drawImage(a.video2Elem, 0, 0, 360, 180);
+
+         //(a.video1Elem.currentTime + 1 / cjs.Ticker.getMeasuredFPS()*a.tickCount)
+
+        if ((audio.currentTime - a.video1Elem.currentTime) > 0.1) {
+            //console.log('audio time changed at: ' + audio.currentTime + ' -vt: ' + a.video1Elem.currentTime);
+            //audio.currentTime = a.video1Elem.currentTime;
+        }
+
+        if(audio.currentTime == audio.duration) {
+            console.log('video end');
+            createjs.Ticker.removeEventListener("tick", onFrame);
+        }
+        //a.tickCount=0;
+    }
+
+</script>
+</body>
+</html>
